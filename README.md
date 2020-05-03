@@ -14,6 +14,9 @@ This wrapper reads interview groups and availabilities from a Google Sheet, gene
 ### Dependencies
 
 - [Google Sheets API for Python](https://developers.google.com/sheets/api/quickstart/python).
+  - [google-api-python-client](https://pypi.org/project/google-api-python-client/).
+  - [google-auth-httplib2](https://pypi.org/project/google-auth-httplib2/).
+  - [google-google-auth-oauthlib](https://pypi.org/project/google-google-auth-oauthlib/).
 - [SchedJulia](https://gitlab.com/leglesslamb/schedjulia).
 
 ### Setup
@@ -23,6 +26,12 @@ This wrapper reads interview groups and availabilities from a Google Sheet, gene
   ```sh
   git clone https://gitlab.com/utmist/schedjulia-wrapper.git
   git submodule update --init --recursive
+  ```
+
+- Install dependencies.
+
+  ```sh
+  pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
   ```
 
 ## Development

@@ -69,14 +69,18 @@ class Schedule:
         values = results.get('valueRanges', [])
 
         for e in values[0]['values']:
-            if e[0] == os.getenv("NULL_NAME") or len(e[1]) == 0 or len(e[2]) == 0 or len(e[3]) == 0:
+            if e[0] == os.getenv("NULL_NAME"):
+                continue
+            if len(e[1]) == 0 or len(e[2]) == 0 or len(e[3]) == 0:
+                continue
+            if e[3] != os.getenv("WEEK"):
                 continue
 
             name = e[0]
             self.names.append(name)
             self.interviewers[name] = e[1].split(', ')
             self.durations[name] = e[2]
-            self.positions[name] = e[3]
+
         for f in values[1]['values']:
             name = (f'{f[1]} {f[2]}').strip(' ')
             self.emails[name] = f[3]
@@ -111,16 +115,11 @@ class Schedule:
         values = []
         body = {'values': values}
         for i in interviews:
-            t, n = tuple(i.split('|'))
-            t1, t2 = tuple(t.split('-'))
-            datetime = f'{time(int(t1))}-{time(int(t2))}, {day(int(t1))}'
-            names = n.rstrip().split(',')
-            interviewee = ''
-            for n1 in names:
-                if ' ' in n1:
-                    interviewee = n1
-            names.remove(interviewee)
-            values.append([datetime, interviewee, ', '.join(names)])
+            interviewee, times, interviewers = tuple(i.split('|'))
+            start, end = tuple(times.split('-'))
+            datetime = f'{day(int(start))}, {time(int(start))}-{time(int(end))}'
+            interviewers = interviewers.rstrip().split(',')
+            values.append([datetime, interviewee, ', '.join(interviewers)])
 
         self.sheets.values().update(
             spreadsheetId=os.getenv("SPREADSHEET_ID"),
