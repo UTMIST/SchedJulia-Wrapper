@@ -69,7 +69,7 @@ class Schedule:
         values = results.get('valueRanges', [])
 
         for e in values[0]['values']:
-            if e[0] == os.getenv("NULL_NAME"):
+            if len(e) < 4 or e[0] == os.getenv("NULL_NAME"):
                 continue
             if len(e[1]) == 0 or len(e[2]) == 0 or len(e[3]) == 0:
                 continue

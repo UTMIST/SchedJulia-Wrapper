@@ -10,6 +10,7 @@ This wrapper reads interview groups and availabilities from a Google Sheet, gene
 
 - [Julia](https://julialang.org/).
 - [Python](https://www.python.org/).
+  - [pip](https://pypi.org/project/pip/).
 
 ### Dependencies
 
