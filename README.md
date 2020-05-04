@@ -1,4 +1,4 @@
-# SchedJulia Wrapper
+# UTMIST Scheduler
 
 Wrapper written in Python around [SchedJulia](https://gitlab.com/leglesslamb/schedjulia) to schedule interviews.
 
@@ -8,17 +8,19 @@ This wrapper reads interview groups and availabilities from a Google Sheet, gene
 
 ### Prerequisites
 
-- [Julia](https://julialang.org/).
-- [Python](https://www.python.org/).
-  - [pip](https://pypi.org/project/pip/).
+- [Julia](https://julialang.org/)
+- [Python](https://www.python.org/)
+  - [pip](https://pypi.org/project/pip/)
 
 ### Dependencies
 
-- [Google Sheets API for Python](https://developers.google.com/sheets/api/quickstart/python).
-  - [google-api-python-client](https://pypi.org/project/google-api-python-client/).
-  - [google-auth-httplib2](https://pypi.org/project/google-auth-httplib2/).
-  - [google-google-auth-oauthlib](https://pypi.org/project/google-google-auth-oauthlib/).
-- [SchedJulia](https://gitlab.com/leglesslamb/schedjulia).
+- [Google Sheets API for Python](https://developers.google.com/sheets/api/quickstart/python)
+  - [google-api-python-client](https://pypi.org/project/google-api-python-client/)
+  - [google-auth-httplib2](https://pypi.org/project/google-auth-httplib2/)
+  - [google-google-auth-oauthlib](https://pypi.org/project/google-google-auth-oauthlib/)
+- [os.path](https://docs.python.org/3/library/os.path.html)
+- [pickle](https://docs.python.org/3/library/pickle.html)
+- [SchedJulia](https://gitlab.com/leglesslamb/schedjulia)
 
 ### Setup
 
@@ -34,6 +36,8 @@ This wrapper reads interview groups and availabilities from a Google Sheet, gene
   ```sh
   pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
   ```
+
+- Load environment variables in `.env`. A blank copy `copy.env` lists the required variables.
 
 ## Development
 
