@@ -76,8 +76,13 @@ class Schedule:
                 continue
 
             name = e[0]
+            actual_name = name
+            if ' [' in actual_name:
+                actual_name = name[:name.index(' [')]
+
             self.names.append(name)
-            self.interviewers[name] = e[1].split(', ')
+            self.interviewers[name] = e[1].split(
+                ', ') + [actual_name]
             self.durations[name] = e[2]
 
         for f in values[1]['values']:
@@ -118,6 +123,7 @@ class Schedule:
             start, end = tuple(times.split('-'))
             datetime = f'{day(int(start))}, {time(int(start))}-{time(int(end))}'
             interviewers = interviewers.rstrip().split(',')
+            interviewers = filter(lambda name: ' ' not in name, interviewers)
             values.append([datetime, interviewee, ', '.join(interviewers)])
 
         self.sheets.values().update(
