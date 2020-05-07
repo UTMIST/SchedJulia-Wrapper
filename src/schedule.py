@@ -82,8 +82,8 @@ class Schedule:
 
             self.names.append(name)
             self.interviewers[name] = e[1].split(
-                ', ') + [actual_name]
-            self.durations[name] = e[2]
+                ', ') + [actual_name] + ['!'+e[2]]
+            self.durations[name] = e[3]
 
         for f in values[1]['values']:
             name = (f'{f[1]} {f[2]}').strip(' ')
@@ -116,16 +116,31 @@ class Schedule:
         """Writes schedule.txt data to sheets"""
         with open('data/schedule.txt') as file:
             interviews = file.readlines()
-        values = []
-        body = {'values': values}
-        for i in interviews:
-            interviewee, times, interviewers = tuple(i.split('|'))
-            start, end = tuple(times.split('-'))
-            datetime = f'{day(int(start))}, {time(int(start))}-{time(int(end))}'
-            interviewers = interviewers.rstrip().split(',')
-            interviewers = filter(lambda name: ' ' not in name, interviewers)
-            values.append([datetime, interviewee, ', '.join(interviewers)])
 
+        values = []
+        for i in interviews:
+            interviewee, times, names = tuple(i.split('|'))
+            names = names.rstrip().split(',')
+
+            start, end = tuple(times.split('-'))
+            duration = int(end)-int(start)+1
+            duration = f'{duration//2}:{duration%2 * 30}'
+            datetime = f'{day(int(start))}, {time(int(start))}'
+
+            room = ""
+            for j in range(len(names)-1, -1, -1):
+                if len(names[j]) == 0:
+                    continue
+                if names[j][0] == '!':
+                    room = names[j]
+                if ' ' in names[j] or names[j][0] == '!':
+                    names.pop(j)
+
+            interviewers = [name for name in names if ' ' not in name]
+            values.append(
+                [datetime, duration, interviewee, room[1:], ', '.join(interviewers)])
+
+        body = {'values': values}
         self.sheets.values().update(
             spreadsheetId=os.getenv("SPREADSHEET_ID"),
             range=os.getenv("OUTPUT_RANGE"),
