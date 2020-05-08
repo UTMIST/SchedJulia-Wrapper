@@ -83,7 +83,7 @@ class Schedule:
                 continue
             if len(e[1]) == 0 or len(e[2]) == 0 or len(e[3]) == 0:
                 continue
-            if e[4] != os.getenv("WEEK"):
+            if e[3] != os.getenv("WEEK"):
                 continue
 
             name = e[0]
@@ -93,8 +93,9 @@ class Schedule:
 
             self.names.append(name)
             self.interviewers[name] = e[1].split(
-                ', ') + [actual_name] + ['!'+e[2]]
-            self.durations[name] = e[3]
+                ', ') + [actual_name]
+            self.durations[name] = e[2]
+            self.positions[name] = e[4]
 
         for f in values[1]['values']:
             name = (f'{f[1]} {f[2]}').strip(' ')
@@ -138,18 +139,20 @@ class Schedule:
             duration = f'{duration//2}:{"30" if duration%2 == 1 else "00" }'
             datetime = f'{day(int(start))}, {time(int(start))}'
 
-            room = ""
             for j in range(len(names)-1, -1, -1):
                 if len(names[j]) == 0:
                     continue
-                if names[j][0] == '!':
-                    room = names[j]
                 if ' ' in names[j] or names[j][0] == '!':
                     names.pop(j)
 
             interviewers = [name for name in names if ' ' not in name]
-            values.append(
-                [datetime, duration, interviewee, room[1:], ', '.join(interviewers)])
+            interviewers.sort()
+            values.append([
+                datetime,
+                duration,
+                interviewee,
+                ', '.join(interviewers),
+                self.positions[interviewee]])
 
         body = {'values': values}
         self.sheets.values().update(
