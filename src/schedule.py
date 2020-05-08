@@ -10,9 +10,20 @@ def day(i: int) -> str:
     return os.getenv("DAYS").split('~')[i//int(os.getenv("DAY_SIZE"))]
 
 
-def time(i: int) -> str:
+def time(index: int) -> str:
     """Return a valid time from its corresponding int value."""
-    return f'{i % int(os.getenv("DAY_SIZE")) // 2}:{i % 2 * 3}0'
+
+    start_hour, start_minute = os.getenv("START_TIME").split(':')
+    start_hour, start_minute = int(start_hour), int(start_minute)
+    if not 0 <= start_hour < 24 or not 0 <= start_minute < 60:
+        exit(1)
+
+    unit = int(os.getenv("TIME_UNIT"))
+    index_of_day = index % int(os.getenv("DAY_SIZE"))
+    hour = start_hour + (unit*index_of_day)//60
+    minute = (start_minute + unit*index_of_day) % 60
+
+    return "{:02d}".format(hour) + ':' + "{:02d}".format(minute)
 
 
 def read_data():
@@ -68,11 +79,11 @@ class Schedule:
         values = results.get('valueRanges', [])
 
         for e in values[0]['values']:
-            if len(e) < 4 or e[0] == os.getenv("NULL_NAME"):
+            if len(e) < 5 or e[0] == os.getenv("NULL_NAME"):
                 continue
             if len(e[1]) == 0 or len(e[2]) == 0 or len(e[3]) == 0:
                 continue
-            if e[3] != os.getenv("WEEK"):
+            if e[4] != os.getenv("WEEK"):
                 continue
 
             name = e[0]
@@ -124,7 +135,7 @@ class Schedule:
 
             start, end = tuple(times.split('-'))
             duration = int(end)-int(start)+1
-            duration = f'{duration//2}:{duration%2 * 30}'
+            duration = f'{duration//2}:{"30" if duration%2 == 1 else "00" }'
             datetime = f'{day(int(start))}, {time(int(start))}'
 
             room = ""
