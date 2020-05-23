@@ -34,14 +34,24 @@ This wrapper reads interview groups and availabilities from a Google Sheet, gene
 - Install dependencies.
 
   ```sh
-  pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+  pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib python-dotenv
   ```
 
-- Load environment variables in `.env`. A blank copy `copy.env` lists the required variables.
+- Load environment variables in `.env`. A blank copy `copy.env` lists the required variables with sample variables from the 2020 summer period. The formats will be documented in the future.
+
+- Place `credentials.json` from the [Google Sheets API](https://developers.google.com/sheets/api/quickstart) in the root directory.
+
+## Usage
+
+Run `script.sh`.
+
+### Troubleshooting
+
+- One bug encountered was expiration of Google Sheets API authentication. Problem might be solved by refreshing `credentials.json` or deleting `token.pickle`.
 
 ## Development
 
 - This project is maintained by the [Infrastructure Department at UTMIST](https://utmist.gitlab.io/team/infrastructure).
-  - [Robbert Liu](https://github.com/triglemon), Infrastructure Developer.
   - [Robert (Rupert) Wu](https://leglesslamb.gitlab.io), VP Infrastructure.
+  - [Robbert Liu](https://github.com/triglemon), Infrastructure Developer.
 - If you're a member of UTMIST and would like to contribute or learn development through this project, you can join our [Discord](https://discord.gg/88mSPw8)) and let us know in _#infrastructure_.

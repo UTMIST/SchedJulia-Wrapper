@@ -1,13 +1,23 @@
+import datetime
 import pickle
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from time import strptime
 
 
-def day(i: int) -> str:
+def date(index: int) -> str:
     """Return a valid day from its corresponding int value."""
-    return os.getenv("DAYS").split('~')[i//int(os.getenv("DAY_SIZE"))]
+    dateParts = os.getenv("DAYS").split(
+        '~')[index//int(os.getenv("DAY_SIZE"))].split(" ")
+
+    year = int(os.getenv("YEAR"))
+    month, day = strptime(dateParts[1], '%b').tm_mon, int(dateParts[2])
+    hour, minute = time(index)
+
+    return datetime.datetime(year, month, day, hour, minute,
+                             0).strftime("%m/%d/%y %H:%M:%S")
 
 
 def time(index: int) -> str:
@@ -23,7 +33,7 @@ def time(index: int) -> str:
     hour = start_hour + (unit*index_of_day)//60
     minute = (start_minute + unit*index_of_day) % 60
 
-    return "{:02d}".format(hour) + ':' + "{:02d}".format(minute)
+    return hour, minute
 
 
 def read_data():
@@ -137,7 +147,7 @@ class Schedule:
             start, end = tuple(times.split('-'))
             duration = int(end)-int(start)+1
             duration = f'{duration//2}:{"30" if duration%2 == 1 else "00" }'
-            datetime = f'{day(int(start))}, {time(int(start))}'
+            datetime = date(int(start))
 
             for j in range(len(names)-1, -1, -1):
                 if len(names[j]) == 0:
